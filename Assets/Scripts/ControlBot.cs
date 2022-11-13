@@ -5,33 +5,39 @@ using UnityEngine;
 public class ControlBot : MonoBehaviour
 {
     // Start is called before the first frame update
-    private int hp; private
+    private int hp; 
     GameObject jugador;
-    GameObject bot;
+    GameObject target;
     public int rapidez; 
+
+
     void Start()
     {
         hp = 100;
-        
+        target = GameObject.Find("Jugador"); 
+
         buscarJugador();
     }
 
     private void buscarJugador()
     {
-        if (Vector3.Distance(bot.position, jugador.transform.position) < 20)
+        if (Vector3.Distance(transform.position, target.transform.position) < 20)
         {
             jugador = GameObject.Find("Jugador");
+            transform.LookAt(jugador.transform);
+            transform.Translate(rapidez * Vector3.forward * Time.deltaTime);
         }
     }
     private void Update()
     {
-        transform.LookAt(jugador.transform);
-        transform.Translate(rapidez * Vector3.forward * Time.deltaTime);
+        buscarJugador();
     }
     public void recibirDaño()
     {
         hp = hp - 25;
-        if (hp <= 0) { this.desaparecer(); }
+        if (hp <= 0) { 
+            this.desaparecer(); 
+        }
     }
     private void desaparecer()
     {

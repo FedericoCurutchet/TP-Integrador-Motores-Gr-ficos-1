@@ -7,11 +7,16 @@ public class ControlJugador : MonoBehaviour
     public float rapidezDesplazamiento = 10.0f;
     public Camera camaraPrimeraPersona;
     public GameObject proyectil;
-    public int municion = 10;
+    
     public TMPro.TMP_Text textoMunicion;
+    public TMPro.TMP_Text textoVida;
+
+    public int municion = 10;
+    public int hp;
     void Start()
     {
         textoMunicion.text = "";
+        textoVida.text = "";
         Cursor.lockState = CursorLockMode.Locked;
         mostrarTextos();
     }
@@ -19,6 +24,22 @@ public class ControlJugador : MonoBehaviour
     public void mostrarTextos()
     {
         textoMunicion.text = "Municion: " + municion.ToString();
+        textoVida.text = "VIDA: " + hp.ToString();
+    }
+    
+    private void recibirDaño()
+    {
+        hp = hp - 25;
+        mostrarTextos();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Bot"))
+        {
+            recibirDaño();
+
+        }
     }
     void Update()
     {
@@ -34,10 +55,10 @@ public class ControlJugador : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && municion > 0)
         {
-            Ray ray = camaraPrimeraPersona.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); 
-            GameObject pro; 
-            pro = Instantiate(proyectil, ray.origin, transform.rotation); 
-            Rigidbody rb = pro.GetComponent<Rigidbody>(); 
+            Ray ray = camaraPrimeraPersona.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            GameObject pro;
+            pro = Instantiate(proyectil, ray.origin, transform.rotation);
+            Rigidbody rb = pro.GetComponent<Rigidbody>();
             rb.AddForce(camaraPrimeraPersona.transform.forward * 80, ForceMode.Impulse);
             municion -= 1;
             mostrarTextos();
@@ -47,18 +68,18 @@ public class ControlJugador : MonoBehaviour
 
             if ((Physics.Raycast(ray, out hit) == true))
             {
-                Debug.Log("El rayo tocó al objeto: " + hit.collider.name); 
-                if (hit.collider.name.Substring(0, 3) == "Bot") { 
+                
+                if (hit.collider.name.Substring(0, 3) == "Bot")
+                {
                     GameObject objetoTocado = GameObject.Find(hit.transform.name);
                     ControlBot scriptObjetoTocado = (ControlBot)objetoTocado.GetComponent(typeof(ControlBot));
-                    if (scriptObjetoTocado != null) { 
-                        scriptObjetoTocado.recibirDaño(); 
-                    } 
+                    if (scriptObjetoTocado != null)
+                    {
+                        scriptObjetoTocado.recibirDaño();
+                    }
                 }
             }
 
         }
-
     }
-
 }

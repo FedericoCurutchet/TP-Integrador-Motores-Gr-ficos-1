@@ -9,6 +9,7 @@ public class ControlCamara : MonoBehaviour
     public float sensibilidad = 5.0f;
     public float suavizado = 2.0f;
     GameObject Jugador;
+    GameObject Pistola;
     void Start()
     {
         Jugador = this.transform.parent.gameObject;
@@ -22,6 +23,7 @@ public class ControlCamara : MonoBehaviour
         mouseMirar += suavidadV; mouseMirar.y = Mathf.Clamp(mouseMirar.y, -90f, 90f);
         transform.localRotation = Quaternion.AngleAxis(-mouseMirar.y, Vector3.right);
         Jugador.transform.localRotation = Quaternion.AngleAxis(mouseMirar.x, Jugador.transform.up);
+        
 
     }
 
