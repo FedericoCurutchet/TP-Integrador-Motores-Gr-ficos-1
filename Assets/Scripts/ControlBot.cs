@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ControlBot : MonoBehaviour
@@ -8,6 +9,7 @@ public class ControlBot : MonoBehaviour
     private int hp; 
     GameObject jugador;
     GameObject target;
+    public GameObject sangre;
     public int rapidez; 
 
 
@@ -35,19 +37,34 @@ public class ControlBot : MonoBehaviour
     public void recibirDaño()
     {
         hp = hp - 25;
+        sangreBot((float)0.1);
         if (hp <= 0) { 
             this.desaparecer(); 
         }
+
     }
+
+    public void sangreBot(float segundos)
+    {
+        Invoke("mostrarSangre",segundos);
+        
+    }
+    public void mostrarSangre()
+    {
+        GameObject particulas = Instantiate(sangre, transform.position, Quaternion.identity) as GameObject; 
+        Destroy(particulas, 2);
+    }
+    
     private void desaparecer()
     {
         Destroy(gameObject);
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("bala"))
+        if (collision.gameObject.CompareTag("Bala"))
         {
             recibirDaño();
+          
 
         }
 

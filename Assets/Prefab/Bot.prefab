@@ -110,4 +110,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1b789e96cc5ff44b72eb1977d967ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sangre: {fileID: 8423490287896038674, guid: 339098cb82f79774dbda711e8620515a, type: 3}
   rapidez: 0
