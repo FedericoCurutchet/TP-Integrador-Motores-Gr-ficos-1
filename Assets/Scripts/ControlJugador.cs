@@ -15,6 +15,7 @@ public class ControlJugador : MonoBehaviour
     public int hp;
     void Start()
     {
+        GestorDeAudio.instancia.ReproducirSonido("musica");
         textoMunicion.text = "";
         textoVida.text = "";
         Cursor.lockState = CursorLockMode.Locked;
@@ -43,6 +44,8 @@ public class ControlJugador : MonoBehaviour
     }
     void Update()
     {
+
+       
         float movimientoAdelanteAtras = Input.GetAxis("Vertical") * rapidezDesplazamiento;
         float movimientoCostados = Input.GetAxis("Horizontal") * rapidezDesplazamiento;
         movimientoAdelanteAtras *= Time.deltaTime; movimientoCostados *= Time.deltaTime;
