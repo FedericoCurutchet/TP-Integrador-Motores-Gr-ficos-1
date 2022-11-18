@@ -7,7 +7,8 @@ public class ControlJugador : MonoBehaviour
     public float rapidezDesplazamiento = 10.0f;
     public Camera camaraPrimeraPersona;
     public GameObject proyectil;
-    
+    public GameObject Municion;
+
     public TMPro.TMP_Text textoMunicion;
     public TMPro.TMP_Text textoVida;
 
@@ -27,7 +28,7 @@ public class ControlJugador : MonoBehaviour
         textoMunicion.text = "Municion: " + municion.ToString();
         textoVida.text = "VIDA: " + hp.ToString();
     }
-    
+
     private void recibirDaño()
     {
         hp = hp - 25;
@@ -41,11 +42,26 @@ public class ControlJugador : MonoBehaviour
             recibirDaño();
 
         }
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+
+        if (other.gameObject.CompareTag("Municion") == true)
+        {
+            other.gameObject.SetActive(false);
+            municion += 10;
+            mostrarTextos();
+
+        }
+
+
     }
     void Update()
     {
 
-       
+
         float movimientoAdelanteAtras = Input.GetAxis("Vertical") * rapidezDesplazamiento;
         float movimientoCostados = Input.GetAxis("Horizontal") * rapidezDesplazamiento;
         movimientoAdelanteAtras *= Time.deltaTime; movimientoCostados *= Time.deltaTime;
@@ -71,7 +87,7 @@ public class ControlJugador : MonoBehaviour
 
             if ((Physics.Raycast(ray, out hit) == true))
             {
-                
+
                 if (hit.collider.name.Substring(0, 3) == "Bot")
                 {
                     GameObject objetoTocado = GameObject.Find(hit.transform.name);
