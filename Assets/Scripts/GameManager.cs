@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         GestorDeAudio.instancia.ReproducirSonido("musica");
+        GestorDeAudio.instancia.ReproducirSonido("zombie");
     }
 
     // Update is called once per frame

@@ -28,6 +28,7 @@ public class ControlBot : MonoBehaviour
             jugador = GameObject.Find("Jugador");
             transform.LookAt(jugador.transform);
             transform.Translate(rapidez * Vector3.forward * Time.deltaTime);
+            GestorDeAudio.instancia.ReproducirSonido("zombie");
         }
     }
     private void Update()
