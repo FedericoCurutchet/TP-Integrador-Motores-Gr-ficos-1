@@ -9,11 +9,26 @@ public class GameManager : MonoBehaviour
     {
         GestorDeAudio.instancia.ReproducirSonido("musica");
         GestorDeAudio.instancia.ReproducirSonido("zombie");
+      
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+
+
+
+        if (other.gameObject.CompareTag("Botiquin") == true)
+        {
+
+            GestorDeAudio.instancia.ReproducirSonido("botiquin");
+
+        }
+
+
+    }
     // Update is called once per frame
     void Update()
     {
-
+     
     }
 }

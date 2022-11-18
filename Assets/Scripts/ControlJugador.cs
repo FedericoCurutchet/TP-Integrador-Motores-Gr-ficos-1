@@ -75,6 +75,7 @@ public class ControlJugador : MonoBehaviour
         if(other.gameObject.CompareTag("Botiquin") == true)
         {
             other.gameObject.SetActive(false);
+            GestorDeAudio.instancia.ReproducirSonido("botiquin");
             botiquin += 1;
             mostrarTextos();
         }
