@@ -11,14 +11,17 @@ public class ControlJugador : MonoBehaviour
 
     public TMPro.TMP_Text textoMunicion;
     public TMPro.TMP_Text textoVida;
+    public TMPro.TMP_Text textoBotiquin;
 
     public int municion = 10;
     public int hp;
+    public int botiquin = 0;
     void Start()
     {
         GestorDeAudio.instancia.ReproducirSonido("musica");
         textoMunicion.text = "";
         textoVida.text = "";
+        textoBotiquin.text = "";
         Cursor.lockState = CursorLockMode.Locked;
         mostrarTextos();
     }
@@ -27,12 +30,25 @@ public class ControlJugador : MonoBehaviour
     {
         textoMunicion.text = "Municion: " + municion.ToString();
         textoVida.text = "VIDA: " + hp.ToString();
+        textoBotiquin.text = "Botiquines: " + botiquin.ToString();
     }
 
     private void recibirDaño()
     {
         hp = hp - 25;
         mostrarTextos();
+    }
+
+    private void curarse()
+    {
+        if (hp < 100 && botiquin >= 1) {
+
+            hp = 100;
+            botiquin -= 1;
+            mostrarTextos();
+
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -56,8 +72,17 @@ public class ControlJugador : MonoBehaviour
 
         }
 
+        if(other.gameObject.CompareTag("Botiquin") == true)
+        {
+            other.gameObject.SetActive(false);
+            botiquin += 1;
+            mostrarTextos();
+        }
+
 
     }
+
+
     void Update()
     {
 
@@ -66,11 +91,19 @@ public class ControlJugador : MonoBehaviour
         float movimientoCostados = Input.GetAxis("Horizontal") * rapidezDesplazamiento;
         movimientoAdelanteAtras *= Time.deltaTime; movimientoCostados *= Time.deltaTime;
         transform.Translate(movimientoCostados, 0, movimientoAdelanteAtras);
+
+
         if (Input.GetKeyDown("escape"))
         {
             Cursor.lockState = CursorLockMode.None;
 
         }
+
+       if(Input.GetKey(KeyCode.H))
+        {
+            curarse();
+
+        } 
 
         if (Input.GetMouseButtonDown(0) && municion > 0)
         {

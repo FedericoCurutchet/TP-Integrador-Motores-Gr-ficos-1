@@ -8,6 +8,7 @@ TagManager:
   - Jugador
   - Bot
   - Municion
+  - Botiquin
   layers:
   - Default
   - TransparentFX
