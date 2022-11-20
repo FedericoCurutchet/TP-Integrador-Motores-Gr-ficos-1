@@ -6,8 +6,8 @@ public class ControlCamara : MonoBehaviour
 {
     Vector2 mouseMirar;
     Vector2 suavidadV;
-    public float sensibilidad = 5.0f;
-    public float suavizado = 2.0f;
+    public float sensibilidad = 3.0f;
+    public float suavizado = 1.0f;
     GameObject Jugador;
     GameObject Pistola;
     void Start()

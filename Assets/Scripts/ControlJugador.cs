@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class ControlJugador : MonoBehaviour
 {
-    public float rapidezDesplazamiento = 10.0f;
+    public float rapidezDesplazamiento = 5.0f;
     public Camera camaraPrimeraPersona;
     public GameObject proyectil;
     public GameObject Municion;
+    public Light LuzLinterna;
+
+    public bool luzactivada = false;
+    public bool correr;
 
     public TMPro.TMP_Text textoMunicion;
     public TMPro.TMP_Text textoVida;
@@ -61,6 +65,8 @@ public class ControlJugador : MonoBehaviour
 
     }
 
+   
+
     private void OnTriggerEnter(Collider other)
     {
 
@@ -86,12 +92,28 @@ public class ControlJugador : MonoBehaviour
 
     void Update()
     {
-
+       
 
         float movimientoAdelanteAtras = Input.GetAxis("Vertical") * rapidezDesplazamiento;
         float movimientoCostados = Input.GetAxis("Horizontal") * rapidezDesplazamiento;
         movimientoAdelanteAtras *= Time.deltaTime; movimientoCostados *= Time.deltaTime;
         transform.Translate(movimientoCostados, 0, movimientoAdelanteAtras);
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            correr = !correr;
+            if (correr == true)
+            {
+                rapidezDesplazamiento = 10.0f;
+            }
+
+            if (correr == false)
+            {
+                rapidezDesplazamiento = 5.0f;
+            }
+           
+
+        }
 
 
         if (Input.GetKeyDown("escape"))
@@ -104,7 +126,22 @@ public class ControlJugador : MonoBehaviour
         {
             curarse();
 
-        } 
+        }
+
+        if (Input.GetKey(KeyCode.F))
+        {
+            luzactivada = !luzactivada;
+            if (luzactivada == true)
+            {
+                LuzLinterna.enabled = true;
+            }
+
+            if (luzactivada == false)
+            {
+                LuzLinterna.enabled = false;
+            }
+
+        }
 
         if (Input.GetMouseButtonDown(0) && municion > 0)
         {
