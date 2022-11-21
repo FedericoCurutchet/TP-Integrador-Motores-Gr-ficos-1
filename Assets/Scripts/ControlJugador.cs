@@ -80,8 +80,8 @@ public class ControlJugador : MonoBehaviour
 
         if(other.gameObject.CompareTag("Botiquin") == true)
         {
-            other.gameObject.SetActive(false);
             GestorDeAudio.instancia.ReproducirSonido("botiquin");
+            other.gameObject.SetActive(false);
             botiquin += 1;
             mostrarTextos();
         }
@@ -143,8 +143,11 @@ public class ControlJugador : MonoBehaviour
 
         }
 
+     
+
         if (Input.GetMouseButtonDown(0) && municion > 0)
         {
+            GestorDeAudio.instancia.ReproducirSonido("disparo");
             Ray ray = camaraPrimeraPersona.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             GameObject pro;
             pro = Instantiate(proyectil, ray.origin, transform.rotation);
@@ -153,9 +156,9 @@ public class ControlJugador : MonoBehaviour
             municion -= 1;
             mostrarTextos();
             Destroy(pro, 5);
-
             RaycastHit hit;
 
+        
             if ((Physics.Raycast(ray, out hit) == true))
             {
 
