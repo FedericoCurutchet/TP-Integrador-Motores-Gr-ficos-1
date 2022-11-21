@@ -23,11 +23,13 @@ public class ControlJugador : MonoBehaviour
     public TMPro.TMP_Text textoMunicion;
     public TMPro.TMP_Text textoVida;
     public TMPro.TMP_Text textoBotiquin;
+    public TMPro.TMP_Text textoObjetos;
 
     public int municion = 10;
     public int municionesc = 6;
     public int hp;
     public int botiquin = 0;
+    public int obj = 4;
     void Start()
     {
         Linterna2.SetActive(false);
@@ -36,6 +38,7 @@ public class ControlJugador : MonoBehaviour
         textoMunicion.text = "";
         textoVida.text = "";
         textoBotiquin.text = "";
+        textoObjetos.text = "";
         Cursor.lockState = CursorLockMode.Locked;
         mostrarTextos();
     }
@@ -52,6 +55,7 @@ public class ControlJugador : MonoBehaviour
         
         textoVida.text = "VIDA: " + hp.ToString();
         textoBotiquin.text = "Botiquines: " + botiquin.ToString();
+        textoObjetos.text = "Objetos Restantes: " + obj.ToString();
     }
 
     private void recibirDaño()
@@ -107,6 +111,15 @@ public class ControlJugador : MonoBehaviour
             GestorDeAudio.instancia.ReproducirSonido("botiquin");
             other.gameObject.SetActive(false);
             botiquin += 1;
+            mostrarTextos();
+        }
+
+
+        if (other.gameObject.CompareTag("Objetos") == true)
+        {
+            
+            other.gameObject.SetActive(false);
+            obj -= 1;
             mostrarTextos();
         }
 
