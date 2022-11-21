@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sangre: {fileID: 8423490287896038674, guid: 339098cb82f79774dbda711e8620515a, type: 3}
-  rapidez: 0
+  rapidez: 3
 --- !u!82 &-345151595900531522
 AudioSource:
   m_ObjectHideFlags: 0

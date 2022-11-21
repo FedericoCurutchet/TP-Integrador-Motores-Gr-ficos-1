@@ -8,6 +8,11 @@ public class ControlJugador : MonoBehaviour
     public Camera camaraPrimeraPersona;
     public GameObject proyectil;
     public GameObject Municion;
+    public GameObject Escopeta;
+    public GameObject Pistola;
+    public GameObject Linterna;
+    public GameObject Linterna2;
+
     public Light LuzLinterna;
 
     public bool luzactivada = false;
@@ -22,6 +27,8 @@ public class ControlJugador : MonoBehaviour
     public int botiquin = 0;
     void Start()
     {
+        Linterna2.SetActive(false);
+        Escopeta.SetActive(false);
         GestorDeAudio.instancia.ReproducirSonido("musica");
         textoMunicion.text = "";
         textoVida.text = "";
@@ -92,7 +99,7 @@ public class ControlJugador : MonoBehaviour
 
     void Update()
     {
-       
+        
 
         float movimientoAdelanteAtras = Input.GetAxis("Vertical") * rapidezDesplazamiento;
         float movimientoCostados = Input.GetAxis("Horizontal") * rapidezDesplazamiento;
@@ -128,6 +135,23 @@ public class ControlJugador : MonoBehaviour
 
         }
 
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+            Pistola.SetActive(true);
+            Linterna.SetActive(true);
+            Escopeta.SetActive(false);
+            Linterna2.SetActive(false);
+
+        }
+
+        if (Input.GetKey(KeyCode.Alpha2))
+        {
+            Pistola.SetActive(false);
+            Linterna.SetActive(false);
+            Escopeta.SetActive(true);
+            Linterna2.SetActive(true);
+        }
+
         if (Input.GetKey(KeyCode.F))
         {
             luzactivada = !luzactivada;
@@ -143,8 +167,7 @@ public class ControlJugador : MonoBehaviour
 
         }
 
-     
-
+        if(Pistola.SetActive(true))
         if (Input.GetMouseButtonDown(0) && municion > 0)
         {
             GestorDeAudio.instancia.ReproducirSonido("disparo");
