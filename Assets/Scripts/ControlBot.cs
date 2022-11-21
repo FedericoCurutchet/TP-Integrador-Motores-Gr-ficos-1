@@ -23,7 +23,7 @@ public class ControlBot : MonoBehaviour
 
     private void buscarJugador()
     {
-        if (Vector3.Distance(transform.position, target.transform.position) < 20)
+        if (Vector3.Distance(transform.position, target.transform.position) < 15)
         {
             jugador = GameObject.Find("Jugador");
             transform.LookAt(jugador.transform);
@@ -41,6 +41,16 @@ public class ControlBot : MonoBehaviour
         sangreBot((float)0.1);
         if (hp <= 0) { 
             this.desaparecer(); 
+        }
+
+    }
+    public void recibirDañoEsc()
+    {
+        hp = hp - 100;
+        sangreBot((float)0.1);
+        if (hp <= 0)
+        {
+            this.desaparecer();
         }
 
     }
@@ -66,6 +76,13 @@ public class ControlBot : MonoBehaviour
         {
             recibirDaño();
           
+
+        }
+
+        if (collision.gameObject.CompareTag("BalaEsc"))
+        {
+            recibirDañoEsc();
+
 
         }
 

@@ -9,6 +9,7 @@ TagManager:
   - Bot
   - Municion
   - Botiquin
+  - BalaEsc
   layers:
   - Default
   - TransparentFX

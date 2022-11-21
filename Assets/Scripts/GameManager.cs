@@ -34,6 +34,11 @@ public class GameManager : MonoBehaviour
         {
 
             GestorDeAudio.instancia.ReproducirSonido("disparo");
+           
+        } else if (Input.GetMouseButtonDown(0))
+        {
+            GestorDeAudio.instancia.ReproducirSonido("disparoesc");
         }
+
     }
 }

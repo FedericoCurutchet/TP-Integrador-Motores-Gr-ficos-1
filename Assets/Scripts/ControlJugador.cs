@@ -7,6 +7,7 @@ public class ControlJugador : MonoBehaviour
     public float rapidezDesplazamiento = 5.0f;
     public Camera camaraPrimeraPersona;
     public GameObject proyectil;
+    public GameObject proyectilEscopeta;
     public GameObject Municion;
     public GameObject Escopeta;
     public GameObject Pistola;
@@ -17,12 +18,14 @@ public class ControlJugador : MonoBehaviour
 
     public bool luzactivada = false;
     public bool correr;
+    public bool set1 = true;
 
     public TMPro.TMP_Text textoMunicion;
     public TMPro.TMP_Text textoVida;
     public TMPro.TMP_Text textoBotiquin;
 
     public int municion = 10;
+    public int municionesc = 6;
     public int hp;
     public int botiquin = 0;
     void Start()
@@ -39,7 +42,14 @@ public class ControlJugador : MonoBehaviour
 
     public void mostrarTextos()
     {
-        textoMunicion.text = "Municion: " + municion.ToString();
+        if(set1 == true)
+        {
+          textoMunicion.text = "Municion Pistola: " + municion.ToString();
+        } else if (set1 == false)
+        {
+            textoMunicion.text = "Municion Escopeta: " + municionesc.ToString();
+        }
+        
         textoVida.text = "VIDA: " + hp.ToString();
         textoBotiquin.text = "Botiquines: " + botiquin.ToString();
     }
@@ -84,8 +94,15 @@ public class ControlJugador : MonoBehaviour
             mostrarTextos();
 
         }
+        if (other.gameObject.CompareTag("Municionesc") == true)
+        {
+            other.gameObject.SetActive(false);
+            municionesc += 6;
+            mostrarTextos();
 
-        if(other.gameObject.CompareTag("Botiquin") == true)
+        }
+
+        if (other.gameObject.CompareTag("Botiquin") == true)
         {
             GestorDeAudio.instancia.ReproducirSonido("botiquin");
             other.gameObject.SetActive(false);
@@ -94,6 +111,105 @@ public class ControlJugador : MonoBehaviour
         }
 
 
+    }
+
+    public void Disparar() {
+        if (set1 == true)
+        {
+
+            if (Input.GetMouseButtonDown(0) && municion > 0)
+            {
+                GestorDeAudio.instancia.ReproducirSonido("disparo");
+                Ray ray = camaraPrimeraPersona.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+                GameObject pro;
+                pro = Instantiate(proyectil, ray.origin, transform.rotation);
+                Rigidbody rb = pro.GetComponent<Rigidbody>();
+                rb.AddForce(camaraPrimeraPersona.transform.forward * 80, ForceMode.Impulse);
+                municion -= 1;
+                mostrarTextos();
+                Destroy(pro, 5);
+                RaycastHit hit;
+
+
+                if ((Physics.Raycast(ray, out hit) == true))
+                {
+
+                    if (hit.collider.name.Substring(0, 3) == "Bot")
+                    {
+                        GameObject objetoTocado = GameObject.Find(hit.transform.name);
+                        ControlBot scriptObjetoTocado = (ControlBot)objetoTocado.GetComponent(typeof(ControlBot));
+                        if (scriptObjetoTocado != null)
+                        {
+                            scriptObjetoTocado.recibirDaño();
+                        }
+                    }
+                }
+
+            }
+        }
+        else if (set1 == false)
+        {
+            if (Input.GetMouseButtonDown(0) && municionesc > 0)
+            {
+                GestorDeAudio.instancia.ReproducirSonido("disparoesc");
+                Ray ray = camaraPrimeraPersona.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+                GameObject proesc;
+                proesc = Instantiate(proyectilEscopeta, ray.origin, transform.rotation);
+                Rigidbody rb = proesc.GetComponent<Rigidbody>();
+                rb.AddForce(camaraPrimeraPersona.transform.forward * 50, ForceMode.Impulse);
+                municionesc -= 1;
+                mostrarTextos();
+                Destroy(proesc, 5);
+                RaycastHit hit;
+
+
+                if ((Physics.Raycast(ray, out hit) == true))
+                {
+
+                    if (hit.collider.name.Substring(0, 3) == "Bot")
+                    {
+                        GameObject objetoTocado = GameObject.Find(hit.transform.name);
+                        ControlBot scriptObjetoTocado = (ControlBot)objetoTocado.GetComponent(typeof(ControlBot));
+                        if (scriptObjetoTocado != null)
+                        {
+                            scriptObjetoTocado.recibirDañoEsc();
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+
+
+    public bool Armas()
+    {
+        
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+            Pistola.SetActive(true);
+            Linterna.SetActive(true);
+            Escopeta.SetActive(false);
+            Linterna2.SetActive(false);
+            textoMunicion.text = "Municion Pistola: " + municion.ToString();
+            mostrarTextos();
+            set1 = true;
+
+        }
+
+        if (Input.GetKey(KeyCode.Alpha2))
+        {
+            Pistola.SetActive(false);
+            Linterna.SetActive(false);
+            Escopeta.SetActive(true);
+            Linterna2.SetActive(true);
+            textoMunicion.text = "Municion Escopeta: " + municionesc.ToString();
+            mostrarTextos();
+            set1 = false;
+        }
+
+        return set1;
     }
 
 
@@ -135,22 +251,7 @@ public class ControlJugador : MonoBehaviour
 
         }
 
-        if (Input.GetKey(KeyCode.Alpha1))
-        {
-            Pistola.SetActive(true);
-            Linterna.SetActive(true);
-            Escopeta.SetActive(false);
-            Linterna2.SetActive(false);
-
-        }
-
-        if (Input.GetKey(KeyCode.Alpha2))
-        {
-            Pistola.SetActive(false);
-            Linterna.SetActive(false);
-            Escopeta.SetActive(true);
-            Linterna2.SetActive(true);
-        }
+        
 
         if (Input.GetKey(KeyCode.F))
         {
@@ -167,35 +268,10 @@ public class ControlJugador : MonoBehaviour
 
         }
 
-        if(Pistola.SetActive(true))
-        if (Input.GetMouseButtonDown(0) && municion > 0)
-        {
-            GestorDeAudio.instancia.ReproducirSonido("disparo");
-            Ray ray = camaraPrimeraPersona.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-            GameObject pro;
-            pro = Instantiate(proyectil, ray.origin, transform.rotation);
-            Rigidbody rb = pro.GetComponent<Rigidbody>();
-            rb.AddForce(camaraPrimeraPersona.transform.forward * 80, ForceMode.Impulse);
-            municion -= 1;
-            mostrarTextos();
-            Destroy(pro, 5);
-            RaycastHit hit;
+        Armas();
+        Disparar();
 
+       
         
-            if ((Physics.Raycast(ray, out hit) == true))
-            {
-
-                if (hit.collider.name.Substring(0, 3) == "Bot")
-                {
-                    GameObject objetoTocado = GameObject.Find(hit.transform.name);
-                    ControlBot scriptObjetoTocado = (ControlBot)objetoTocado.GetComponent(typeof(ControlBot));
-                    if (scriptObjetoTocado != null)
-                    {
-                        scriptObjetoTocado.recibirDaño();
-                    }
-                }
-            }
-
-        }
     }
 }
