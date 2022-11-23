@@ -12,6 +12,11 @@ TagManager:
   - BalaEsc
   - Municionesc
   - Objetos
+  - Mapa
+  - Combustible
+  - Tarjeta
+  - Llave
+  - Salida
   layers:
   - Default
   - TransparentFX
