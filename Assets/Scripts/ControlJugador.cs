@@ -35,6 +35,8 @@ public class ControlJugador : MonoBehaviour
     public TMPro.TMP_Text textoTarjeta;
     public TMPro.TMP_Text textoComb;
     public TMPro.TMP_Text textoHUD;
+    public TMPro.TMP_Text textoPerdiste;
+    public TMPro.TMP_Text textoCreditos;
 
     public int municion = 10;
     public int municionesc = 6;
@@ -55,6 +57,8 @@ public class ControlJugador : MonoBehaviour
         textoTarjeta.text = " ";
         textoComb.text = "";
         textoHUD.text = "";
+        textoPerdiste.text = "";
+        textoCreditos.text = "";
         Cursor.lockState = CursorLockMode.Locked;
         mostrarTextos();
     }
@@ -176,9 +180,11 @@ public class ControlJugador : MonoBehaviour
             textoTarjeta.color = Color.green;
         }
 
-        if((other.gameObject.CompareTag("Salida") == true && obj == 0)){
+        if((other.gameObject.CompareTag("Salida") == true && obj == 0))
+        {
 
             Ganaste();
+            
 
         }
 
@@ -290,13 +296,47 @@ public class ControlJugador : MonoBehaviour
 
     private void Ganaste()
     {
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            Reinicio();
+
+        }
+        textoMunicion.text = "";
+        textoVida.text = "";
+        textoBotiquin.text = "";
+        textoObjetos.text = "";
+        textoMapa.text = "";
+        textoLlave.text = "";
+        textoTarjeta.text = " ";
+        textoComb.text = "";
+        textoHUD.text = "";
+        textoCreditos.text = "GANASTEEEE \n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "GRACIAS POR JUGAR \n" +
+            "Este juego fue basado y diseñado en base a las clases del profesor  Sebastian Gabriel Blanco \n" +
+            "Para la creacion de este juego se utilizaron los siguientes assets: \n" +
+            "Ammo de Arcsine Technologies \n" +
+            "First-Aid Set de GeeKay 3D \n" +
+            "Guns Pack: Low Poly Guns Collection de Fun Assets \n" +
+            "GAZ Street Props de Helsssoo \n" +
+            "Un videojuego de Federico Curutchet \n";
+      
         Time.timeScale = 0;
+       
         
     }
 
     private void Perdiste()
     {
+        textoPerdiste.text = "GAME OVER \n" +
+            "\n" +
+            "\n" +
+            "Pulsa R para volver a empezar.";
         Time.timeScale = 0;
+        mostrarTextos();
     }
 
 
