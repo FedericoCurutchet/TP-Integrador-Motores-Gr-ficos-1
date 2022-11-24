@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Auto
+  m_Name: Ruedas
   m_Shader: {fileID: -6465566751694194690, guid: 28ba9959466e16d47b18c8da264207a1,
     type: 3}
   m_ValidKeywords: []
