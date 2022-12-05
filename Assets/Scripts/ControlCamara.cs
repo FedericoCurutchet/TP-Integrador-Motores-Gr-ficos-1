@@ -10,9 +10,27 @@ public class ControlCamara : MonoBehaviour
     public float suavizado = 1.0f;
     GameObject Jugador;
     GameObject Pistola;
+    public Camera camaraPrimeraPersona;
+    public GameObject Escopeta;
     void Start()
     {
         Jugador = this.transform.parent.gameObject;
+    }
+
+    public void Apuntar()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            camaraPrimeraPersona.fieldOfView = 15;
+            
+
+
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            camaraPrimeraPersona.fieldOfView = 60;
+           
+        }
     }
     void Update()
     {
@@ -23,8 +41,8 @@ public class ControlCamara : MonoBehaviour
         mouseMirar += suavidadV; mouseMirar.y = Mathf.Clamp(mouseMirar.y, -90f, 90f);
         transform.localRotation = Quaternion.AngleAxis(-mouseMirar.y, Vector3.right);
         Jugador.transform.localRotation = Quaternion.AngleAxis(mouseMirar.x, Jugador.transform.up);
-        
 
+        Apuntar();
     }
 
 }
