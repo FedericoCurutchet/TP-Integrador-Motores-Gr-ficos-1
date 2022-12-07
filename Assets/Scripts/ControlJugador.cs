@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class ControlJugador : MonoBehaviour
@@ -14,6 +15,7 @@ public class ControlJugador : MonoBehaviour
     public GameObject Pistola;
     public GameObject Linterna;
     public GameObject Linterna2;
+    public GameObject Jugador;
 
     public GameObject Mapa;
     public GameObject Combustible;
@@ -37,18 +39,24 @@ public class ControlJugador : MonoBehaviour
     public TMPro.TMP_Text textoHUD;
     public TMPro.TMP_Text textoPerdiste;
     public TMPro.TMP_Text textoCreditos;
+    public RawImage PistolaLogo;
+    public RawImage EscopetaLogo;
+
 
     public int valmaxp = 10;
     public int valmaxe = 6;
-    public int munrec;
-    public int munrecesc;
-    public int municion = 10;
-    public int municionesc = 6;
+    public int munrec = 10;
+    public int munrecesc = 6;
+    public int municion = 0;
+    public int municionesc = 0;
     public int hp;
     public int botiquin = 0;
     public int obj = 4;
+    public float posicionY;
     void Start()
     {
+        PistolaLogo.gameObject.SetActive(true);
+        EscopetaLogo.gameObject.SetActive(false);
         Linterna2.SetActive(false);
         Escopeta.SetActive(false);
         GestorDeAudio.instancia.ReproducirSonido("musica");
@@ -71,10 +79,15 @@ public class ControlJugador : MonoBehaviour
     {
         if (set1 == true)
         {
-            textoMunicion.text = "Municion Pistola: " + munrec.ToString() + "|" +  municion.ToString();
+            textoMunicion.text = munrec.ToString() + "|" + municion.ToString();
+            PistolaLogo.gameObject.SetActive(true);
+            EscopetaLogo.gameObject.SetActive(false);
+
         } else if (set1 == false)
         {
-            textoMunicion.text = "Municion Escopeta: " + munrecesc.ToString() + "|" + municionesc.ToString();
+            textoMunicion.text = munrecesc.ToString() + "|" + municionesc.ToString();
+            PistolaLogo.gameObject.SetActive(false);
+            EscopetaLogo.gameObject.SetActive(true);
         }
 
         textoVida.text = "VIDA: " + hp.ToString();
@@ -86,31 +99,33 @@ public class ControlJugador : MonoBehaviour
         textoComb.text = "Combustible";
         textoHUD.text = " 1 Pistola| 2 Escopeta| F Linterna | H Botiquin";
     }
-    public void Recagar()
+    private void Recagar()
     {
         int numaux;
         numaux = valmaxp - munrec;
 
-        if (munrec == 0 && municion > 0) {
-
-            if (municion >= 10)
+        if (municion > 0) {
+            if (munrec == 0)
             {
-                munrec = valmaxp;
-                municion -= valmaxp;
 
-            } else if (municion < valmaxp)
-            {
-                munrec = municion;
-                municion -= municion;
+                if (municion >= 10)
+                {
+                    munrec = valmaxp;
+                    municion -= valmaxp;
+
+                }
+                else if (municion < valmaxp)
+                {
+                    munrec = municion;
+                    municion -= municion;
+                }
             }
-        } else if (munrec >= 1 || munrec <= 9 && municion > numaux)
-        {
-            numaux = valmaxp - munrec;
-            munrec += numaux;
-            municion -= numaux;
-        } else
-        {
-
+            else if (munrec >= 1 || munrec <= 9 && municion > numaux)
+            {
+                numaux = valmaxp - munrec;
+                munrec += numaux;
+                municion -= numaux;
+            }
         }
 
         mostrarTextos();
@@ -120,27 +135,31 @@ public class ControlJugador : MonoBehaviour
     private void RecargarEsc()
     {
         int numaux;
-        if (munrecesc == 0 && municionesc > 0)
+        if (municionesc > 0)
         {
-
-            if (municionesc >= 10)
+            if (munrecesc == 0)
             {
-                munrecesc = valmaxe;
-                municionesc -= valmaxe;
 
+                if (municionesc >= 10)
+                {
+                    munrecesc = valmaxe;
+                    municionesc -= valmaxe;
+
+                }
+                else if (municionesc < valmaxe)
+                {
+                    munrecesc = municionesc;
+                    municionesc -= municionesc;
+                }
             }
-            else if (municionesc < valmaxe)
+            else if (munrecesc >= 1 || munrecesc <= 5 && municionesc > valmaxe - municionesc)
             {
-                munrecesc = municionesc;
-                municionesc -= municionesc;
+                numaux = valmaxe - munrecesc;
+                munrecesc += numaux;
+                municionesc -= numaux;
             }
         }
-        else if (munrecesc >= 1 || munrecesc <= 5 && municionesc > valmaxe - municionesc)
-        {
-            numaux = valmaxe - munrecesc;
-            munrecesc += numaux;
-            municionesc -= numaux;
-        }
+
         mostrarTextos();
     }
     private void recibirDaño()
@@ -161,6 +180,36 @@ public class ControlJugador : MonoBehaviour
 
     }
 
+    private void Correr()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+
+            rapidezDesplazamiento = 10.0f;
+
+
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            rapidezDesplazamiento = 5.0f;
+        }
+    }
+
+    private void Despacio()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+
+            rapidezDesplazamiento = 2.0f;
+
+
+        }
+        else if (Input.GetKeyUp(KeyCode.C))
+        {
+            rapidezDesplazamiento = 5.0f;
+        }
+    }
+ 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Bot"))
@@ -270,12 +319,13 @@ public class ControlJugador : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0) && munrec > 0)
             {
-                GestorDeAudio.instancia.ReproducirSonido("disparo");
+               
                 Ray ray = camaraPrimeraPersona.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
                 GameObject pro;
                 pro = Instantiate(proyectil, ray.origin, transform.rotation);
                 Rigidbody rb = pro.GetComponent<Rigidbody>();
                 rb.AddForce(camaraPrimeraPersona.transform.forward * 80, ForceMode.Impulse);
+                GestorDeAudio.instancia.ReproducirSonido("disparo");
                 munrec -= 1;
                 mostrarTextos();
                 Destroy(pro, 5);
@@ -435,23 +485,6 @@ public class ControlJugador : MonoBehaviour
             }
         }
 
-       
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            correr = !correr;
-            if (correr == true)
-            {
-                rapidezDesplazamiento = 10.0f;
-            }
-
-            if (correr == false)
-            {
-                rapidezDesplazamiento = 5.0f;
-            }
-           
-
-        }
-
 
         if (Input.GetKeyDown("escape"))
         {
@@ -481,15 +514,17 @@ public class ControlJugador : MonoBehaviour
             }
 
         }
+
         if (set1 == true && Input.GetKey(KeyCode.R))
         {
             Recagar();
-        }
-        if (set1 == false && Input.GetKey(KeyCode.R))
+        }else if (set1 == false && Input.GetKey(KeyCode.R))
         {
             RecargarEsc();
         }
 
+        Despacio();
+        Correr();
         Armas();
         Disparar();
         //Apuntar();

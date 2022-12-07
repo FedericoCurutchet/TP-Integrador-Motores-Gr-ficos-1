@@ -12,6 +12,8 @@ public class ControlCamara : MonoBehaviour
     GameObject Pistola;
     public Camera camaraPrimeraPersona;
     public GameObject Escopeta;
+
+
     void Start()
     {
         Jugador = this.transform.parent.gameObject;

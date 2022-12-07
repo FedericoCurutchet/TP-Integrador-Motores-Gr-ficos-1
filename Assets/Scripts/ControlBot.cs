@@ -10,20 +10,22 @@ public class ControlBot : MonoBehaviour
     GameObject jugador;
     GameObject target;
     public GameObject sangre;
-    public int rapidez; 
+    public int rapidez;
+    public int Deteccion;
 
 
     void Start()
     {
         hp = 100;
-        target = GameObject.Find("Jugador"); 
+        target = GameObject.Find("Jugador");
+        Deteccion = 15;
 
         buscarJugador();
     }
 
     private void buscarJugador()
     {
-        if (Vector3.Distance(transform.position, target.transform.position) < 15)
+        if (Vector3.Distance(transform.position, target.transform.position) < Deteccion)
         {
             jugador = GameObject.Find("Jugador");
             transform.LookAt(jugador.transform);
@@ -34,6 +36,31 @@ public class ControlBot : MonoBehaviour
     private void Update()
     {
         buscarJugador();
+
+        if (Deteccion < 10000000 && Input.GetKeyDown(KeyCode.LeftShift))
+        {
+
+            Deteccion = 25;
+
+
+        }
+        else if (Deteccion < 10000000 && Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            Deteccion = 15;
+        }
+
+        if (Deteccion < 10000000 && Input.GetKeyDown(KeyCode.C))
+        {
+
+            Deteccion = 5;
+
+
+        }
+        else if (Deteccion < 10000000 && Input.GetKeyUp(KeyCode.C))
+        {
+            Deteccion = 15;
+        }
+
     }
     public void recibirDaño()
     {
@@ -75,14 +102,14 @@ public class ControlBot : MonoBehaviour
         if (collision.gameObject.CompareTag("Bala"))
         {
             recibirDaño();
-          
+            Deteccion = 10000000;
 
         }
 
         if (collision.gameObject.CompareTag("BalaEsc"))
         {
             recibirDañoEsc();
-
+            Deteccion = 10000000;
 
         }
 
