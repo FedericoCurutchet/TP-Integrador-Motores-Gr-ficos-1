@@ -7,7 +7,7 @@ public class PostPro : MonoBehaviour
     void Start()
     {
         Volume volume = GetComponent<Volume>();
-        volume.sharedProfile.TryGet<Bloom>(out bloom);
+        volume.sharedProfile.TryGet<Bloom>(out bloom); 
         if (bloom != null)
         {
             bloom.intensity.value = 1.0f;

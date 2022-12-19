@@ -29,6 +29,7 @@ public class ControlJugador : MonoBehaviour
     public bool correr;
     public bool set1 = true;
     public bool masc = false;
+    public bool atasc = false;
     
 
     public TMPro.TMP_Text textoMunicion;
@@ -90,7 +91,8 @@ public class ControlJugador : MonoBehaviour
 
         float movimientoAdelanteAtras = Input.GetAxis("Vertical") * rapidezDesplazamiento;
         float movimientoCostados = Input.GetAxis("Horizontal") * rapidezDesplazamiento;
-        movimientoAdelanteAtras *= Time.deltaTime; movimientoCostados *= Time.deltaTime;
+        movimientoAdelanteAtras *= Time.deltaTime;
+        movimientoCostados *= Time.deltaTime;
         transform.Translate(movimientoCostados, 0, movimientoAdelanteAtras);
 
 
@@ -145,6 +147,8 @@ public class ControlJugador : MonoBehaviour
         }
 
 
+
+        armaatasc();
         ActivarMascara();
         invocarTextos();
         Despacio();
@@ -262,10 +266,12 @@ public class ControlJugador : MonoBehaviour
     }
     public void Disparar()
     {
+
+
         if (set1 == true)
         {
-
-            if (Input.GetMouseButtonDown(0) && munrec > 0)
+            
+            if (atasc == false && Input.GetMouseButtonDown(0) && munrec > 0)
             {
 
                 Ray ray = camaraPrimeraPersona.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -294,6 +300,14 @@ public class ControlJugador : MonoBehaviour
                     }
                 }
 
+            }
+            else if (atasc == true && Input.GetMouseButtonDown(0) && munrec > 0)
+            {
+                GestorDeAudio.instancia.ReproducirSonido("sinbala");
+                if (atasc == true && Input.GetKey(KeyCode.L))
+                {
+                    atasc = false;
+                }
             }
         }
         else if (set1 == false)
@@ -374,6 +388,21 @@ public class ControlJugador : MonoBehaviour
         }
 
 
+    }
+    private void armaatasc()
+    {
+        atasc = false;
+        int rnd;
+        rnd = Random.Range(0, 100);
+
+        if (rnd >= 0 && rnd <= 25) {
+
+            atasc = true;
+        
+        }
+
+       
+        
     }
     #endregion
 

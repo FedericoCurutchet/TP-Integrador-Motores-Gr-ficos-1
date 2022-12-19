@@ -17,6 +17,8 @@ TagManager:
   - Tarjeta
   - Llave
   - Salida
+  - Gas
+  - Lluvia
   layers:
   - Default
   - TransparentFX
