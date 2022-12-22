@@ -46,6 +46,7 @@ public class ControlJugador : MonoBehaviour
     public TMPro.TMP_Text textoPerdiste;
     public TMPro.TMP_Text textoCreditos;
     public TMPro.TMP_Text textoControles;
+    public TMPro.TMP_Text textoArmadura;
     public RawImage PistolaLogo;
     public RawImage EscopetaLogo;
     public RawImage FondoMenu;
@@ -57,6 +58,10 @@ public class ControlJugador : MonoBehaviour
     public int munrecesc = 6;
     public int municion = 0;
     public int municionesc = 0;
+    public int mun_maxp;
+    public int mun_maxe;
+    public int escudo;
+    public int escudo_max;
     public float hp;
     public float hp_max;
     public int botiquin = 0;
@@ -87,14 +92,17 @@ public class ControlJugador : MonoBehaviour
         textoPerdiste.text = "";
         textoCreditos.text = "";
         textoControles.text = "";
+        textoArmadura.text = escudo.ToString();
         Cursor.lockState = CursorLockMode.Locked;
-        mostrarTextos();
+        escudo = 0;
         enem_elim = 0;
         Menu_LVL.SetActive(false);
         lvl = false;
         hp_max = 100;
         lvl_x = 0;
-        
+        escudo_max = 0;
+        mostrarTextos();
+
     }
     void Update()
     {
@@ -206,27 +214,34 @@ public class ControlJugador : MonoBehaviour
         lvl = false;
         Menu_LVL.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
+        mostrarTextos();
     }
     public void lvlup_armadura()
     {
-       
+        escudo_max += 1;
         lvl = false;
         Menu_LVL.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
+        mostrarTextos();
     }
     public void lvlup_municion()
     {
-       
+        valmaxe += 2;
+        valmaxp += 5;
         lvl = false;
         Menu_LVL.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
+        mostrarTextos();
     }
     public void lvlup_sigilo()
     {
-        
+        ControlBot.Deteccion_Correr -= 3;
+        ControlBot.Deteccion_Normal -= 2;
+        ControlBot.Deteccion_Agacahrse -= 1;
         lvl = false;
         Menu_LVL.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
+        mostrarTextos();
     }
     private void Recagar()
     {
@@ -490,6 +505,7 @@ public class ControlJugador : MonoBehaviour
             EscopetaLogo.gameObject.SetActive(true);
         }
 
+        textoArmadura.text = escudo.ToString();
         textoVida.text = "VIDA: " + hp.ToString();
         textoBotiquin.text = "Botiquines: " + botiquin.ToString();
         textoHUD.text = "J| Controlesar \n" +
@@ -606,12 +622,16 @@ public class ControlJugador : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Bot"))
+        if (collision.gameObject.CompareTag("Bot") && escudo == 0)
         {
             recibirDaño();
 
-        }
+        } else if (collision.gameObject.CompareTag("Bot") && escudo >= 1)
+        {
+            escudo -= 1;
+            mostrarTextos();
 
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -624,6 +644,18 @@ public class ControlJugador : MonoBehaviour
             mostrarTextos();
 
         }
+
+        if (other.gameObject.CompareTag("escudo") == true && escudo < escudo_max)
+        {
+            other.gameObject.SetActive(false);
+            escudo += 1;
+            mostrarTextos();
+
+        }else if (other.gameObject.CompareTag("escudo") == true && escudo >= escudo_max)
+        {
+
+        }
+
         if (other.gameObject.CompareTag("Municionesc") == true)
         {
             other.gameObject.SetActive(false);

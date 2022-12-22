@@ -12,6 +12,9 @@ public class ControlBot : MonoBehaviour
     public GameObject sangre;
     public int rapidez;
     public int Deteccion;
+    public static int Deteccion_Normal;
+    public static int Deteccion_Correr;
+    public static int Deteccion_Agacahrse;
 
 
     void Start()
@@ -19,6 +22,10 @@ public class ControlBot : MonoBehaviour
         hp = 100;
         target = GameObject.Find("Jugador");
         Deteccion = 15;
+        Deteccion_Normal = 15;
+        Deteccion_Correr = 25;
+        Deteccion_Agacahrse = 5;
+
 
         buscarJugador();
     }
@@ -40,25 +47,25 @@ public class ControlBot : MonoBehaviour
         if (Deteccion < 10000000 && Input.GetKeyDown(KeyCode.LeftShift))
         {
 
-            Deteccion = 25;
+            Deteccion = Deteccion_Correr;
 
 
         }
         else if (Deteccion < 10000000 && Input.GetKeyUp(KeyCode.LeftShift))
         {
-            Deteccion = 15;
+            Deteccion = Deteccion_Normal;
         }
 
         if (Deteccion < 10000000 && Input.GetKeyDown(KeyCode.C))
         {
 
-            Deteccion = 5;
+            Deteccion = Deteccion_Agacahrse;
 
 
         }
         else if (Deteccion < 10000000 && Input.GetKeyUp(KeyCode.C))
         {
-            Deteccion = 15;
+            Deteccion = Deteccion_Normal;
         }
 
     }
