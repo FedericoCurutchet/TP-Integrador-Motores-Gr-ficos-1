@@ -67,7 +67,9 @@ public class ControlBot : MonoBehaviour
         hp = hp - 25;
         sangreBot((float)0.1);
         if (hp <= 0) { 
-            this.desaparecer(); 
+            this.desaparecer();
+            ControlJugador.enem_elim += 1;
+            ControlJugador.lvl = true;
         }
 
     }
@@ -78,6 +80,8 @@ public class ControlBot : MonoBehaviour
         if (hp <= 0)
         {
             this.desaparecer();
+            ControlJugador.enem_elim += 1;
+            ControlJugador.lvl = true;
         }
 
     }

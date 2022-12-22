@@ -17,6 +17,7 @@ public class ControlJugador : MonoBehaviour
     public GameObject Linterna;
     public GameObject Linterna2;
     public GameObject Jugador;
+    public GameObject Menu_LVL;
 
     public GameObject Mapa;
     public GameObject Combustible;
@@ -30,7 +31,8 @@ public class ControlJugador : MonoBehaviour
     public bool set1 = true;
     public bool masc = false;
     public bool atasc = false;
-    
+    public static bool lvl;
+
 
     public TMPro.TMP_Text textoMunicion;
     public TMPro.TMP_Text textoVida;
@@ -56,9 +58,12 @@ public class ControlJugador : MonoBehaviour
     public int municion = 0;
     public int municionesc = 0;
     public float hp;
+    public float hp_max;
     public int botiquin = 0;
     public int obj = 4;
     public float posicionY;
+    public static int enem_elim;
+    public int lvl_x;
     #endregion
     void Start()
     {
@@ -84,6 +89,12 @@ public class ControlJugador : MonoBehaviour
         textoControles.text = "";
         Cursor.lockState = CursorLockMode.Locked;
         mostrarTextos();
+        enem_elim = 0;
+        Menu_LVL.SetActive(false);
+        lvl = false;
+        hp_max = 100;
+        lvl_x = 0;
+        
     }
     void Update()
     {
@@ -146,8 +157,7 @@ public class ControlJugador : MonoBehaviour
             RecargarEsc();
         }
 
-
-
+        Niveles();
         armaatasc();
         ActivarMascara();
         invocarTextos();
@@ -161,6 +171,63 @@ public class ControlJugador : MonoBehaviour
     }
 
     #region Mecanicas
+
+    public void Niveles()
+    {
+        if (enem_elim == 1 && lvl == true && lvl_x == 0) {
+            Menu_LVL.SetActive(true);
+            enem_elim = 0;
+            lvl_x = 1;
+        }
+
+        if (enem_elim == 3 && lvl == true && lvl_x == 1)
+        {
+            Menu_LVL.SetActive(true);
+            enem_elim = 0;
+            lvl_x = 2;
+        }
+        if (enem_elim == 5 && lvl == true && lvl_x == 2)
+        {
+            Menu_LVL.SetActive(true);
+            enem_elim = 0;
+            lvl_x = 3;
+        }
+        if (enem_elim == 5 && lvl == true && lvl_x == 3)
+        {
+            Menu_LVL.SetActive(true);
+            enem_elim = 0;
+            lvl_x = 4;
+        }
+    }
+
+    public void lvlup_vida()
+    {
+        hp_max += 25;
+        lvl = false;
+        Menu_LVL.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    public void lvlup_armadura()
+    {
+       
+        lvl = false;
+        Menu_LVL.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    public void lvlup_municion()
+    {
+       
+        lvl = false;
+        Menu_LVL.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    public void lvlup_sigilo()
+    {
+        
+        lvl = false;
+        Menu_LVL.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+    }
     private void Recagar()
     {
         int numaux;
@@ -226,10 +293,10 @@ public class ControlJugador : MonoBehaviour
     }
     private void curarse()
     {
-        if (hp < 100 && botiquin >= 1)
+        if (hp < hp_max && botiquin >= 1)
         {
 
-            hp = 100;
+            hp = hp_max;
             botiquin -= 1;
             mostrarTextos();
 
@@ -519,6 +586,7 @@ public class ControlJugador : MonoBehaviour
     private void Reinicio()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1;
     }
     private void recibirDaño()
     {
