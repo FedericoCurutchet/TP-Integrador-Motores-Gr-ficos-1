@@ -71,6 +71,7 @@ public class ControlJugador : MonoBehaviour
     public float posicionY;
     public static int enem_elim;
     public int lvl_x;
+    public int aleatorio;
     #endregion
     void Start()
     {
@@ -170,6 +171,7 @@ public class ControlJugador : MonoBehaviour
             RecargarEsc();
         }
 
+
         Niveles();
         armaatasc();
         ActivarMascara();
@@ -184,7 +186,6 @@ public class ControlJugador : MonoBehaviour
     }
 
     #region Mecanicas
-
     public void AbrirCofre()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -616,7 +617,10 @@ public class ControlJugador : MonoBehaviour
            "Click Izquierdo| Disparar \n" +
            "Click Derecho| Apuntar \n" +
            "C| Agacharse \n" +
-           "Shift| Correr\n";
+           "Shift| Correr\n" +
+           "X| Activar Mascara de Gas \n" +
+           "L| Desactivar Mascara de Gas";
+
 
             FondoMenu.gameObject.SetActive(true);
         }
@@ -629,11 +633,11 @@ public class ControlJugador : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
         {
             textoObjetos.text = "Encuentra los siguientes objetos \n " +
-            "para escapar con el auto: " + obj.ToString();
-            textoMapa.text = "Mapa";
-            textoLlave.text = "Llave del Auto";
-            textoTarjeta.text = "Tarjeta Garaje";
-            textoComb.text = "Combustible";
+            "para escapar con el auto que esta en el garaje: " + obj.ToString();
+            textoMapa.text = " Agarrar Mapa";
+            textoLlave.text = "Agarrar Llave del Auto";
+            textoTarjeta.text = "Buscar Tarjeta Garaje";
+            textoComb.text = "Buscar Combustible";
         }
         if (Input.GetKeyUp(KeyCode.K))
         {
