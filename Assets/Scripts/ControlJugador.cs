@@ -18,6 +18,7 @@ public class ControlJugador : MonoBehaviour
     public GameObject Linterna2;
     public GameObject Jugador;
     public GameObject Menu_LVL;
+    public GameObject Cofre;
 
     public GameObject Mapa;
     public GameObject Combustible;
@@ -31,6 +32,7 @@ public class ControlJugador : MonoBehaviour
     public bool set1 = true;
     public bool masc = false;
     public bool atasc = false;
+    public bool disparar;
     public static bool lvl;
 
 
@@ -56,15 +58,15 @@ public class ControlJugador : MonoBehaviour
     public int valmaxe = 6;
     public int munrec = 10;
     public int munrecesc = 6;
-    public int municion = 0;
-    public int municionesc = 0;
+    public static int municion = 0;
+    public static int municionesc = 0;
     public int mun_maxp;
     public int mun_maxe;
-    public int escudo;
-    public int escudo_max;
+    public static int escudo;
+    public static int escudo_max;
     public float hp;
     public float hp_max;
-    public int botiquin = 0;
+    public static int botiquin = 0;
     public int obj = 4;
     public float posicionY;
     public static int enem_elim;
@@ -97,7 +99,9 @@ public class ControlJugador : MonoBehaviour
         escudo = 0;
         enem_elim = 0;
         Menu_LVL.SetActive(false);
+        Cofre.SetActive(false);
         lvl = false;
+        disparar = true;
         hp_max = 100;
         lvl_x = 0;
         escudo_max = 0;
@@ -113,6 +117,7 @@ public class ControlJugador : MonoBehaviour
         movimientoAdelanteAtras *= Time.deltaTime;
         movimientoCostados *= Time.deltaTime;
         transform.Translate(movimientoCostados, 0, movimientoAdelanteAtras);
+
 
 
         if (hp <= 0)
@@ -180,12 +185,45 @@ public class ControlJugador : MonoBehaviour
 
     #region Mecanicas
 
+    public void AbrirCofre()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+
+            Ray ray = camaraPrimeraPersona.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit hit;
+            if ((Physics.Raycast(ray, out hit) == true) && hit.distance < 10)
+            {
+
+
+                if ((hit.collider.tag == "Cofre_Jugador"))
+                {
+                    Cofre.SetActive(true);
+                    disparar = false;
+                    Time.timeScale = 0;
+                    Cursor.lockState = CursorLockMode.None;
+                }
+
+
+            }
+
+
+        }
+    }
+    public void cerrarCofre()
+    {
+        Cofre.SetActive(false);
+        disparar = true;
+        Time.timeScale = 1;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
     public void Niveles()
     {
         if (enem_elim == 1 && lvl == true && lvl_x == 0) {
             Menu_LVL.SetActive(true);
             enem_elim = 0;
             lvl_x = 1;
+            Cursor.lockState = CursorLockMode.None;
         }
 
         if (enem_elim == 3 && lvl == true && lvl_x == 1)
@@ -193,18 +231,21 @@ public class ControlJugador : MonoBehaviour
             Menu_LVL.SetActive(true);
             enem_elim = 0;
             lvl_x = 2;
+            Cursor.lockState = CursorLockMode.None;
         }
         if (enem_elim == 5 && lvl == true && lvl_x == 2)
         {
             Menu_LVL.SetActive(true);
             enem_elim = 0;
             lvl_x = 3;
+            Cursor.lockState = CursorLockMode.None;
         }
         if (enem_elim == 5 && lvl == true && lvl_x == 3)
         {
             Menu_LVL.SetActive(true);
             enem_elim = 0;
             lvl_x = 4;
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 
@@ -352,8 +393,8 @@ public class ControlJugador : MonoBehaviour
 
         if (set1 == true)
         {
-            
-            if (atasc == false && Input.GetMouseButtonDown(0) && munrec > 0)
+
+            if (atasc == false && Input.GetMouseButtonDown(0) && munrec > 0 && disparar == true)
             {
 
                 Ray ray = camaraPrimeraPersona.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -390,11 +431,14 @@ public class ControlJugador : MonoBehaviour
                 {
                     atasc = false;
                 }
+            } else if (atasc == false && Input.GetMouseButtonDown(0) && munrec > 0 && disparar == false)
+            {
+
             }
         }
         else if (set1 == false)
         {
-            if (Input.GetMouseButtonDown(0) && munrecesc > 0)
+            if (Input.GetMouseButtonDown(0) && munrecesc > 0 && disparar == true)
             {
                 GestorDeAudio.instancia.ReproducirSonido("disparoesc");
                 Ray ray = camaraPrimeraPersona.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -421,6 +465,9 @@ public class ControlJugador : MonoBehaviour
                         }
                     }
                 }
+
+            } else if (Input.GetMouseButtonDown(0) && munrecesc > 0 && disparar == false)
+            {
 
             }
         }
@@ -637,11 +684,14 @@ public class ControlJugador : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if (other.gameObject.CompareTag("Municion") == true)
+        if (other.gameObject.CompareTag("Municion") == true && municion < 30)
         {
             other.gameObject.SetActive(false);
             municion += 10;
             mostrarTextos();
+
+        } else if (other.gameObject.CompareTag("Municion") == true && municion >= 30)
+        {
 
         }
 
@@ -656,20 +706,26 @@ public class ControlJugador : MonoBehaviour
 
         }
 
-        if (other.gameObject.CompareTag("Municionesc") == true)
+        if (other.gameObject.CompareTag("Municionesc") == true &&  municionesc < 20)
         {
             other.gameObject.SetActive(false);
             municionesc += 6;
             mostrarTextos();
 
+        } else if (other.gameObject.CompareTag("Municionesc") == true && municionesc >= 20)
+        {
+
         }
 
-        if (other.gameObject.CompareTag("Botiquin") == true)
+        if (other.gameObject.CompareTag("Botiquin") == true && botiquin < 5)
         {
             GestorDeAudio.instancia.ReproducirSonido("botiquin");
             other.gameObject.SetActive(false);
             botiquin += 1;
             mostrarTextos();
+        } else if (other.gameObject.CompareTag("Botiquin") == true && botiquin >= 5)
+        {
+
         }
 
 
